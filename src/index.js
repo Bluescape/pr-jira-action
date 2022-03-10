@@ -28,7 +28,7 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       ] : []
     }
   })
-  console.log('Ticket created')
+  console.log(`Ticket created: ${JSON.stringify(issue)}`)
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
     await client.updateAssignee(issue.key, assignee)
