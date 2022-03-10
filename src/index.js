@@ -28,11 +28,14 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       ] : []
     }
   })
+  console.log('Ticket created')
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
     await client.updateAssignee(issue.key, assignee)
+    console.log('Ticket assigned')
     // 31 is In Progress
     await client.transitionIssue(issue.key, { transition: { id: '31' } })
+    console.log('Ticket moved to in progress')
   }
   return issue
 }
@@ -63,14 +66,14 @@ async function main () {
   // Update the PR title
   const context = github.context
   console.log(JSON.stringify(context))
-  const { owner, repo, number, event } = context.issue
+  const { owner, repo, number, title } = context.payload.issue
 
   const octokit = github.getOctokit(token)
   await octokit.rest.pulls.update({
     owner,
     repo,
     pull_number: number,
-    title: `${issue.key}: ${event.title}`
+    title: `${issue.key}: ${title}`
   })
 }
 
