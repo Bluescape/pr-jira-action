@@ -28,16 +28,6 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       ] : []
     }
   })
-  console.log('> Ticket created')
-  console.log(JSON.stringify(issue))
-  // adding assignee to the addNewIssue context requires an id instead of an email
-  if (assignee) {
-    await client.updateAssignee(issue.key, assignee)
-    console.log(`> Ticket assigned to ${assignee}`)
-    // 31 is In Progress
-    await client.transitionIssue(issue.key, { transition: { id: '31' } })
-    console.log('> Ticket moved to in progress')
-  }
   return issue
 }
 
@@ -65,7 +55,15 @@ async function main () {
   })
 
   const issue = await createAndAssignTicket(client, projectId, { assignee, summary: title, description: body, component })
-  console.log(`Issue created: https://${host}/browse/${issue.key}`)
+  console.log(`Ticket created: https://${host}/browse/${issue.key}`)
+  // adding assignee to the addNewIssue context requires an id instead of an email
+  if (assignee) {
+    await client.updateAssignee(issue.key, assignee)
+    console.log(`> Ticket assigned to ${assignee}`)
+    // 31 is In Progress
+    await client.transitionIssue(issue.key, { transition: { id: '31' } })
+    console.log('> Ticket moved to in progress')
+  }
 
   const octokit = github.getOctokit(token)
   // Update the PR title
