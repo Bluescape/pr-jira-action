@@ -48,7 +48,7 @@ async function main () {
   const projectName = core.getInput('project-name')
 
   const octokit = github.getOctokit(token)
-  if (!projectId && projectName) {
+  if (!projectId && !projectName) {
     await octokit.rest.issues.createComment({
       owner,
       repo,
