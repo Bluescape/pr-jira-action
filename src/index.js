@@ -1,4 +1,5 @@
 const core = require('@actions/core')
+const github = require('@actions/github')
 const JiraApi = require('jira-client')
 
 const issueTypes = {
@@ -37,6 +38,7 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
 }
 
 async function main () {
+  const token = core.getInput('github-token')
   const projectId = core.getInput('project-id')
   const host = core.getInput('host')
   const username = core.getInput('username')
@@ -57,6 +59,19 @@ async function main () {
 
   const issue = await createAndAssignTicket(client, projectId, assignee, { summary, description, component })
   console.log(`Issue created: ${host}/${issue.key}`)
+
+  // Update the PR title
+  const context = github.context
+  console.log(JSON.stringify(context))
+  const { owner, repo, number, event } = context.issue
+
+  const octokit = github.getOctokit(token)
+  await octokit.rest.pulls.update({
+    owner,
+    repo,
+    pull_number: number,
+    title: `${issue.key}: ${event.title}`
+  })
 }
 
 main().catch((error) => {
