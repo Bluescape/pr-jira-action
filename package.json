@@ -14,8 +14,8 @@
   "license": "ISC",
   "homepage": "https://github.com/Bluescape/pr-jira-action#readme",
   "dependencies": {
-    "@actions/core": "^1.2.6",
-    "@actions/github": "^3.0.0",
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
     "eslint-plugin-jest": "^23.17.1",
     "jira-client": "^8.1.0"
   },

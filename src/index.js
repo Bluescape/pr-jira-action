@@ -48,9 +48,13 @@ async function main () {
   const password = core.getInput('password')
   const assignee = core.getInput('assignee')
   const component = core.getInput('component')
-  const summary = 'Automatically Generated Ticket'
-  const description = 'Auto generated description, please fill in.'
-  // summary, description comes from github context
+
+  const context = github.context
+  console.log(JSON.stringify(context.payload.issue))
+  const { owner, repo, number, title } = context.payload.issue
+  // summary, description will come from github context
+  const description = context.payload.issue.description || 'Auto generated description, please fill in.'
+
   const client = new JiraApi({
     protocol: 'https',
     host,
@@ -60,15 +64,11 @@ async function main () {
     strictSSL: true
   })
 
-  const issue = await createAndAssignTicket(client, projectId, assignee, { summary, description, component })
+  const issue = await createAndAssignTicket(client, projectId, assignee, { summary: title, description, component })
   console.log(`Issue created: ${host}/${issue.key}`)
 
-  // Update the PR title
-  const context = github.context
-  console.log(JSON.stringify(context))
-  const { owner, repo, number, title } = context.payload.issue
-
   const octokit = github.getOctokit(token)
+  // Update the PR title
   await octokit.rest.pulls.update({
     owner,
     repo,
