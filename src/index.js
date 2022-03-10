@@ -81,6 +81,7 @@ async function main () {
     description: body,
     component
   })
+  console.log(JSON.stringify(issue))
   console.log(`Ticket created: https://${host}/browse/${issue.key}`)
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
