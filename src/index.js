@@ -64,7 +64,7 @@ async function main () {
     strictSSL: true
   })
 
-  const issue = await createAndAssignTicket(client, projectId, assignee, { summary: title, description, component })
+  const issue = await createAndAssignTicket(client, projectId, { assignee, summary: title, description, component })
   console.log(`Issue created: ${host}/${issue.key}`)
 
   const octokit = github.getOctokit(token)
