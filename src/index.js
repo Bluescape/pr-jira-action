@@ -10,7 +10,7 @@ const issueTypes = {
   bug: '10004'
 }
 
-async function createAndAssignTicket (client, projectId, { assignee, summary, description, component }) {
+async function createAndAssignTicket (client, projectId, { summary, description, component }) {
   const issue = await client.addNewIssue({
     fields: {
       summary,
@@ -54,7 +54,7 @@ async function main () {
     strictSSL: true
   })
 
-  const issue = await createAndAssignTicket(client, projectId, { assignee, summary: title, description: body, component })
+  const issue = await createAndAssignTicket(client, projectId, { summary: title, description: body, component })
   console.log(`Ticket created: https://${host}/browse/${issue.key}`)
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
