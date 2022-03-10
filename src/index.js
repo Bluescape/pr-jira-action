@@ -28,14 +28,15 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       ] : []
     }
   })
-  console.log(`Ticket created: ${JSON.stringify(issue)}`)
+  console.log('> Ticket created')
+  console.log(JSON.stringify(issue))
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
     await client.updateAssignee(issue.key, assignee)
-    console.log('Ticket assigned')
+    console.log(`> Ticket assigned to ${assignee}`)
     // 31 is In Progress
     await client.transitionIssue(issue.key, { transition: { id: '31' } })
-    console.log('Ticket moved to in progress')
+    console.log('> Ticket moved to in progress')
   }
   return issue
 }
@@ -50,11 +51,9 @@ async function main () {
   const component = core.getInput('component')
 
   const context = github.context.payload
-  console.log(JSON.stringify(context))
   const { number, title } = context.issue
   const repo = context.repository.name
   const owner = context.repository.owner.login
-  // summary, description will come from github context
   const description = context.issue.description || 'Auto generated description, please fill in.'
 
   const client = new JiraApi({
@@ -71,12 +70,14 @@ async function main () {
 
   const octokit = github.getOctokit(token)
   // Update the PR title
+  const newTitle = `${issue.key}: ${title}`
   await octokit.rest.pulls.update({
     owner,
     repo,
     pull_number: number,
-    title: `${issue.key}: ${title}`
+    title: newTitle
   })
+  console.log(`> PR Title updated as '${newTitle}'`)
 }
 
 main().catch((error) => {
