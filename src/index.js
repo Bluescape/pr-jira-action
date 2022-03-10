@@ -73,7 +73,7 @@ async function main () {
   })
 
   if (!projectId) {
-    projectId = (await client.getProject(projectName)).id
+    projectId = (await client.getProject(projectName.toUpperCase())).id
   }
 
   const issue = await createAndAssignTicket(client, projectId, {
