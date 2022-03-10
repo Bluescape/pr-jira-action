@@ -75,6 +75,12 @@ async function main () {
     title: newTitle
   })
   console.log(`> PR Title updated as '${newTitle}'`)
+  await octokit.rest.issues.createComment({
+    owner,
+    repo,
+    issue_number: number,
+    body: `JIRA created: https://${host}/browse/${issue.key}`
+  })
 }
 
 main().catch((error) => {
