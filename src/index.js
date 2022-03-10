@@ -20,11 +20,11 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       issuetype: {
         id: issueTypes.task
       },
-      components: [
+      components: component ? [
         {
           id: component
         }
-      ]
+      ] : []
     }
   })
   // adding assignee to the addNewIssue context requires an id instead of an email

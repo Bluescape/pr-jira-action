@@ -4,6 +4,9 @@ inputs:
   project-id:
     description: 'The id which maps to the project to create a ticket for'
     required: true
+  component:
+    description:
+    required: false
   host:
     description: 'Url for the JIRA server'
     required: true
