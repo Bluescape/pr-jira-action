@@ -10,7 +10,11 @@ const issueTypes = {
   bug: '10004'
 }
 
-async function createAndAssignTicket (client, projectId, { summary, description, component }) {
+async function createAndAssignTicket (
+  client,
+  projectId,
+  { summary, description, component }
+) {
   const issue = await client.addNewIssue({
     fields: {
       summary,
@@ -21,29 +25,43 @@ async function createAndAssignTicket (client, projectId, { summary, description,
       issuetype: {
         id: issueTypes.task
       },
-      components: component ? [
-        {
-          id: component
-        }
-      ] : []
+      components: component
+        ? [
+          {
+            id: component
+          }
+        ]
+        : []
     }
   })
   return issue
 }
 
 async function main () {
+  const context = github.context.payload
+  const { number, title, body } = context.issue
+  const repo = context.repository.name
+  const owner = context.repository.owner.login
+
   const token = core.getInput('github-token')
-  const projectId = core.getInput('project-id')
+  let projectId = core.getInput('project-id')
+  const projectName = core.getInput('project-name')
+
+  const octokit = github.getOctokit(token)
+  if (!projectId && projectName) {
+    await octokit.rest.issues.createComment({
+      owner,
+      repo,
+      issue_number: number,
+      body: 'Failed to create JIRA because both project-id and project-name were not defined.'
+    })
+    throw Error('Either project-id or project-name is required')
+  }
   const host = core.getInput('host')
   const username = core.getInput('username')
   const password = core.getInput('password')
   const assignee = core.getInput('assignee')
   const component = core.getInput('component')
-
-  const context = github.context.payload
-  const { number, title, body } = context.issue
-  const repo = context.repository.name
-  const owner = context.repository.owner.login
 
   const client = new JiraApi({
     protocol: 'https',
@@ -54,7 +72,15 @@ async function main () {
     strictSSL: true
   })
 
-  const issue = await createAndAssignTicket(client, projectId, { summary: title, description: body, component })
+  if (!projectId) {
+    projectId = (await client.getProject(projectName)).id
+  }
+
+  const issue = await createAndAssignTicket(client, projectId, {
+    summary: title,
+    description: body,
+    component
+  })
   console.log(`Ticket created: https://${host}/browse/${issue.key}`)
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
@@ -65,7 +91,6 @@ async function main () {
     console.log('> Ticket moved to in progress')
   }
 
-  const octokit = github.getOctokit(token)
   // Update the PR title
   const newTitle = `${issue.key}: ${title}`
   await octokit.rest.pulls.update({

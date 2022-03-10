@@ -6,7 +6,10 @@ inputs:
     required: true
   project-id:
     description: 'The id which maps to the project to create a ticket for'
-    required: true
+    required: false
+  project-name:
+    description: 'The name which maps to the project to create a ticket for'
+    required: false
   component:
     description:
     required: false
