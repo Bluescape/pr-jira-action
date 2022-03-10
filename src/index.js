@@ -49,11 +49,13 @@ async function main () {
   const assignee = core.getInput('assignee')
   const component = core.getInput('component')
 
-  const context = github.context
-  console.log(JSON.stringify(context.payload.issue))
-  const { owner, repo, number, title } = context.payload.issue
+  const context = github.context.payload
+  console.log(JSON.stringify(context))
+  const { number, title } = context.issue
+  const repo = context.repository.name
+  const owner = context.repository.owner.login
   // summary, description will come from github context
-  const description = context.payload.issue.description || 'Auto generated description, please fill in.'
+  const description = context.issue.description || 'Auto generated description, please fill in.'
 
   const client = new JiraApi({
     protocol: 'https',
