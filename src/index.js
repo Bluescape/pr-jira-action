@@ -78,7 +78,7 @@ async function main () {
 
   const issue = await createAndAssignTicket(client, projectId, {
     summary: title,
-    description: body,
+    description: body || '',
     component
   })
   if (!issue.key) {
