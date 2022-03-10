@@ -6,6 +6,7 @@ GitHub Action that creates JIRA's based off of a pull request. When called, the 
 - Assign it to a user
 - Set it to "In Progress"
 - Update the name of the PR to include that JIRA as a prefix
+- Comment back to the PR with a link to the JIRA
 
 ## Inputs
 See action.yml for the input arguments
