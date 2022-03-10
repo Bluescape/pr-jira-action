@@ -1,0 +1,18 @@
+name: 'PR JIRA Action'
+description: 'Creates a JIRA ticket based off of a pull request'
+inputs:
+  project-id:
+    description: 'The id which maps to the project to create a ticket for'
+    required: true
+  host:
+    description: 'Url for the JIRA server'
+    required: true
+    default: jira.common.bluescape.com
+  username:
+    description: 'Username for authentication of the API requests'
+    required: true
+  password:
+    description: 'Password for authentication of the API requests'
+runs:
+  using: 'node16'
+  main: 'src/index.js'
