@@ -73,7 +73,17 @@ async function main () {
   })
 
   if (!projectId) {
-    projectId = (await client.getProject(projectName.toUpperCase())).id
+    try {
+      projectId = (await client.getProject(projectName.toUpperCase())).id
+    } catch (e) {
+      await octokit.rest.issues.createComment({
+        owner,
+        repo,
+        issue_number: number,
+        body: `Failed to find project id for project with name ${projectName.toUpperCase()}. ${e}`
+      })
+      throw Error(`Failed to find project id for project with name ${projectName.toUpperCase()}. ${e}`)
+    }
   }
 
   const issue = await createAndAssignTicket(client, projectId, {
