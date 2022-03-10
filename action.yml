@@ -10,6 +10,9 @@ inputs:
   component:
     description:
     required: false
+  assignee:
+    description: 'Email linked to a JIRA account to assign the ticket to'
+    required: false
   host:
     description: 'Url for the JIRA server'
     required: true
