@@ -9,11 +9,7 @@ const issueTypes = {
   bug: '10004'
 }
 
-const components = {
-  framework: '11800'
-}
-
-async function createAndAssignTicket (client, projectId, { assignee, summary, description }) {
+async function createAndAssignTicket (client, projectId, { assignee, summary, description, component }) {
   const issue = await client.addNewIssue({
     fields: {
       summary,
@@ -26,7 +22,7 @@ async function createAndAssignTicket (client, projectId, { assignee, summary, de
       },
       components: [
         {
-          id: components.framework
+          id: component
         }
       ]
     }
@@ -46,6 +42,7 @@ async function main () {
   const username = core.getInput('username')
   const password = core.getInput('password')
   const assignee = core.getInput('assignee')
+  const component = core.getInput('component')
   const summary = 'Automatically Generated Ticket'
   const description = 'Auto generated description, please fill in.'
   // summary, description comes from github context
@@ -58,7 +55,7 @@ async function main () {
     strictSSL: true
   })
 
-  const issue = await createAndAssignTicket(client, projectId, assignee, { summary, description })
+  const issue = await createAndAssignTicket(client, projectId, assignee, { summary, description, component })
   console.log(issue.key)
 }
 

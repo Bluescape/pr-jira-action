@@ -16,7 +16,8 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^3.0.0",
-    "eslint-plugin-jest": "^23.17.1"
+    "eslint-plugin-jest": "^23.17.1",
+    "jira-client": "^8.1.0"
   },
   "devDependencies": {
     "eslint": "^7.3.1",
