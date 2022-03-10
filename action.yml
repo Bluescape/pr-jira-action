@@ -2,7 +2,7 @@ name: 'PR JIRA Action'
 description: 'Creates a JIRA ticket based off of a pull request'
 inputs:
   github-token:
-    description: 'Usually ${{ secrets.GITHUB_TOKEN }}'
+    description: 'Usually secrets.GITHUB_TOKEN'
     required: true
   project-id:
     description: 'The id which maps to the project to create a ticket for'
