@@ -21,7 +21,7 @@ Create a workflow `.yml` file in your `.github/workflows` directory. An example 
           host: jira.com
           username: ${{ secrets.JIRA_USERNAME }}
           password: ${{ secrets.JIRA_PASSWORD }}
-          assignee: ${{ steps.get-email.outputs.email }}
+          assignee: testuser@gmail.com
 ```
 
 ### Common Implementations
