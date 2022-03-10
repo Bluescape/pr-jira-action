@@ -56,7 +56,7 @@ async function main () {
   })
 
   const issue = await createAndAssignTicket(client, projectId, assignee, { summary, description, component })
-  console.log(issue.key)
+  console.log(`Issue created: ${host}/${issue.key}`)
 }
 
 main().catch((error) => {
