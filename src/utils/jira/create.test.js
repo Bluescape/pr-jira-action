@@ -3,6 +3,7 @@ const { createTask } = require('./create')
 let client
 
 beforeEach(() => {
+  jest.clearAllMocks()
   client = {
     listComponents: jest.fn().mockReturnValue([{
       id: '12345',
@@ -21,6 +22,29 @@ beforeEach(() => {
 
 test('Creates issue with component when found', async () => {
   await createTask(client, 'QAA', 'title', { component: 'Test' })
+  expect(client.addNewIssue).toHaveBeenCalledTimes(1)
+  expect(client.addNewIssue).toHaveBeenCalledWith({
+    fields: {
+      summary: 'title',
+      description: '',
+      project: {
+        id: '123'
+      },
+      issuetype: {
+        id: '10002'
+      },
+      components: [
+        {
+          id: '12345'
+        }
+      ]
+    }
+  })
+})
+
+test('Creates issue with component when found with different casing', async () => {
+  await createTask(client, 'QAA', 'title', { component: 'tEsT' })
+  expect(client.addNewIssue).toHaveBeenCalledTimes(1)
   expect(client.addNewIssue).toHaveBeenCalledWith({
     fields: {
       summary: 'title',
@@ -42,6 +66,7 @@ test('Creates issue with component when found', async () => {
 
 test('Creates issue with description when body set', async () => {
   await createTask(client, 'QAA', 'title', { body: 'Test' })
+  expect(client.addNewIssue).toHaveBeenCalledTimes(1)
   expect(client.addNewIssue).toHaveBeenCalledWith({
     fields: {
       summary: 'title',
@@ -58,6 +83,7 @@ test('Creates issue with description when body set', async () => {
 
 test('Creates issue without component when not defined', async () => {
   await createTask(client, 'QAA', 'title')
+  expect(client.addNewIssue).toHaveBeenCalledTimes(1)
   expect(client.addNewIssue).toHaveBeenCalledWith({
     fields: {
       summary: 'title',
