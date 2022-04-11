@@ -44,6 +44,7 @@ async function main () {
       console.warn('> Could not move the ticket to "In Progress", it may not be an option in the workflow')
     }
   }
+  return issue
 }
 
 main().then(async (issue) => {
