@@ -10,33 +10,6 @@ const issueTypes = {
   bug: '10004'
 }
 
-async function createAndAssignTicket (
-  client,
-  projectId,
-  { summary, description, component }
-) {
-  const issue = await client.addNewIssue({
-    fields: {
-      summary,
-      description,
-      project: {
-        id: projectId
-      },
-      issuetype: {
-        id: issueTypes.task
-      },
-      components: component
-        ? [
-          {
-            id: component
-          }
-        ]
-        : []
-    }
-  })
-  return issue
-}
-
 async function main () {
   const context = github.context.payload
   const { number, title, body } = context.issue
@@ -82,15 +55,42 @@ async function main () {
         issue_number: number,
         body: `Failed to find project id for project with name ${projectName.toUpperCase()}. ${e}`
       })
-      throw Error(`Failed to find project id for project with name ${projectName.toUpperCase()}. ${e}`)
+      throw Error(
+        `Failed to find project id for project with name ${projectName.toUpperCase()}. ${e}`
+      )
     }
   }
 
-  const issue = await createAndAssignTicket(client, projectId, {
-    summary: title,
-    description: body || '',
-    component
+  let components
+
+  if (component) {
+    // Get the component id
+    const res = await client.listComponents(projectName)
+    const id = res.find(comp => comp.name === component).id
+    if (!id) {
+      throw Error(`Id not found for component '${component}', it may not exist in the project '${projectName}'`)
+    }
+    components = [
+      {
+        id
+      }
+    ]
+  }
+
+  const issue = await client.addNewIssue({
+    fields: {
+      summary: title,
+      description: body || '',
+      project: {
+        id: projectId
+      },
+      issuetype: {
+        id: issueTypes.task
+      },
+      components
+    }
   })
+
   if (!issue.key) {
     throw Error(JSON.stringify(issue))
   }
