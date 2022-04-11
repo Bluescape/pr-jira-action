@@ -4,7 +4,8 @@
   "description": "Creates a JIRA ticket based off of a pull request",
   "main": "src/index.js",
   "scripts": {
-    "lint": "eslint . "
+    "lint": "eslint . ",
+    "test": "jest . --silent"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "jira-client": "^8.1.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.1",
     "eslint": "^7.3.1",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.21.2",
