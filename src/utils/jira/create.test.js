@@ -98,6 +98,11 @@ test('Creates issue without component when not defined', async () => {
   })
 })
 
+test('Throws when projectId isnt found', async () => {
+  client.getProject = jest.fn().mockReturnValue({})
+  await expect(async () => await createTask(client, 'AD', 'title')).rejects.toThrow()
+})
+
 test('Throws when component isnt found', async () => {
   await expect(async () => await createTask(client, 'QAA', 'title', { component: 'NotReal' })).rejects.toThrow()
 })
