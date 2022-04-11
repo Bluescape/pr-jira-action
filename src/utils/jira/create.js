@@ -14,7 +14,7 @@ async function createTask (client, projectName, title, { component, body } = {})
   if (component) {
     // Get the component id
     const res = await client.listComponents(projectName)
-    const id = res.find(comp => comp.name === component).id
+    const id = res.find(comp => comp.name.toLowerCase() === component.toLowerCase()).id
     if (!id) {
       throw Error(`Id not found for component '${component}', it may not exist in the project '${projectName}'`)
     }
