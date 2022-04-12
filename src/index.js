@@ -62,7 +62,7 @@ main().then(async (issue) => {
     owner,
     repo,
     issue_number: number,
-    body: `JIRA created: https://${host}/browse/${issue.key}`
+    body: `> JIRA created: https://${host}/browse/${issue.key}`
   })
 }).catch(async (error) => {
   core.setFailed(error.message)

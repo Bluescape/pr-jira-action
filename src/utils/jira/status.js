@@ -1,12 +1,12 @@
 async function updateStatusWithName (client, issueKey, statusName) {
-  const statusId = (await client.listStatus()).find(
-    (comp) => comp.name.toLowerCase() === statusName.toLowerCase()
+  const transitionId = (await client.listTransitions(issueKey)).find(
+    (status) => status.name.toLowerCase() === statusName.toLowerCase()
   )?.id
-  if (!statusId) {
+  if (!transitionId) {
     throw Error(`No id found for status of '${statusName}'`)
   }
-  console.log(`> Status '${statusName}' found with id '${statusId}'`)
-  await client.transitionIssue(issueKey, { transition: { id: statusId.toString() } })
+  console.log(`> Status '${statusName}' found with id '${transitionId}'`)
+  await client.transitionIssue(issueKey, { transition: { id: transitionId } })
   console.log('> Ticket moved to "In Progress"')
 }
 
