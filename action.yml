@@ -25,6 +25,10 @@ inputs:
     required: true
   password:
     description: 'Password for authentication of the API requests'
+  status:
+    description: 'The status to set the ticket to'
+    required: false
+    default: 'In Progress'
 runs:
   using: 'node16'
   main: 'src/index.js'
