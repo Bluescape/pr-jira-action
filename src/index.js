@@ -39,7 +39,7 @@ async function main () {
     console.log(`> Ticket assigned to ${assignee}`)
     // 31 is In Progress
     try {
-      updateStatusWithName(client, issue.key, status)
+      await updateStatusWithName(client, issue.key, status)
     } catch (e) {
       console.warn(e)
       console.warn('> Could not move the ticket to "In Progress", it may not be an option in the workflow')
