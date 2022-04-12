@@ -31,7 +31,7 @@ async function main () {
   })
 
   const issue = await createTask(client, projectName, title, { component, body })
-  console.log(`Ticket created: https://${host}/browse/${issue.key}`)
+  console.log(`> Ticket created: https://${host}/browse/${issue.key}`)
 
   // adding assignee to the addNewIssue context requires an id instead of an email
   if (assignee) {
@@ -62,7 +62,7 @@ main().then(async (issue) => {
     owner,
     repo,
     issue_number: number,
-    body: `> JIRA created: https://${host}/browse/${issue.key}`
+    body: `JIRA created: https://${host}/browse/${issue.key}`
   })
 }).catch(async (error) => {
   core.setFailed(error.message)
