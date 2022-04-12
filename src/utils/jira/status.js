@@ -1,5 +1,6 @@
 async function updateStatusWithName (client, issueKey, statusName) {
-  const transitionId = (await client.listTransitions(issueKey)).find(
+  const { transitions } = await client.listTransitions(issueKey)
+  const transitionId = transitions.find(
     (status) => status.name.toLowerCase() === statusName.toLowerCase()
   )?.id
   if (!transitionId) {

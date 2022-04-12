@@ -5,10 +5,12 @@ let client
 beforeEach(() => {
   jest.clearAllMocks()
   client = {
-    listTransitions: jest.fn().mockReturnValue([{
-      name: 'In Progress',
-      id: '31'
-    }]),
+    listTransitions: jest.fn().mockReturnValue({
+      transitions: [{
+        name: 'In Progress',
+        id: '31'
+      }]
+    }),
     transitionIssue: jest.fn().mockReturnValue({})
   }
 })
