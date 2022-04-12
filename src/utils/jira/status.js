@@ -5,6 +5,7 @@ async function updateStatusWithName (client, issueKey, statusName) {
   if (!statusId) {
     throw Error(`No id found for status of '${statusName}'`)
   }
+  console.log(`> Status '${statusName}' found with id '${statusId}'`)
   await client.transitionIssue(issueKey, { transition: { id: statusId } })
   console.log('> Ticket moved to "In Progress"')
 }
