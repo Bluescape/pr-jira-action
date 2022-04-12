@@ -2,6 +2,7 @@ const core = require('@actions/core')
 const github = require('@actions/github')
 const JiraApi = require('jira-client')
 const { createTask } = require('./utils/jira/create')
+const { updateStatusWithName } = require('./utils/jira/status')
 
 const context = github.context.payload
 const { number, title, body } = context.issue
@@ -17,6 +18,7 @@ const password = core.getInput('password')
 const assignee = core.getInput('assignee')
 const component = core.getInput('component')
 const projectName = core.getInput('project-name')
+const status = core.getInput('status')
 
 async function main () {
   const client = new JiraApi({
@@ -37,8 +39,7 @@ async function main () {
     console.log(`> Ticket assigned to ${assignee}`)
     // 31 is In Progress
     try {
-      await client.transitionIssue(issue.key, { transition: { id: '31' } })
-      console.log('> Ticket moved to "In Progress"')
+      updateStatusWithName(client, issue.key, status)
     } catch (e) {
       console.warn(e)
       console.warn('> Could not move the ticket to "In Progress", it may not be an option in the workflow')
